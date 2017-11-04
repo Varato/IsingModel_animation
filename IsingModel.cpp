@@ -43,9 +43,9 @@ int main()
     int t;
     vecf e_sum;
     vecf e_sqr_sum;
-    vecf c;
+    vecf c; // heat capacity record
     float ee[2];
-    float cc;
+    float cc; 
     vecf T = {1.5, 2.26, 3};
     IsingModel ising(N, M);
     ising.draw(0, false);
@@ -67,6 +67,7 @@ int main()
         }
         cc = e_sqr_sum[i]/ave_n/T[i]/T[i] \
             - e_sum[i]*e_sum[i]/ave_n/ave_n/T[i]/T[i];
+        c.push_back(cc);
     }
     std::cout << "\033[" << N+1 << "B" <<std::endl;
 
@@ -80,7 +81,7 @@ IsingModel::IsingModel(int N, int M)
     this->num_s = N*M;
     srand(222);
     for(int i = 0; i < N*M; ++i)
-        this->s.push_back( 1) ;//(int)(2*(std::rand()%2 - 0.5)) );
+        this->s.push_back(1) ;//(int)(2*(std::rand()%2 - 0.5)) );
 }
 
 IsingModel::~IsingModel()

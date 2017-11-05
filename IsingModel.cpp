@@ -1,6 +1,7 @@
 /* 2D Ising Model */
 
 #include <iostream>
+#include <fstream>
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -36,17 +37,19 @@ public:
 int main()
 {
 
-    int N = 80, M = 80;
-    int tmax = 2000;
-    int tdis = 500;
+    std::ofstream outfile;
+    outfile.open("energy_data_15_100_100", std::ios::out);
+    int N = 100, M = 100;
+    int tmax = 50000;
+    int tdis = 2000;
     int ave_n = tmax - tdis;
     int t;
     vecf e_sum;
     vecf e_sqr_sum;
-    vecf c; // heat capacity record
-    float ee[2];
+    vecf c;      // heat capacity record
+    float ee[2]; // array to store energy and squared energy
     float cc; 
-    vecf T = {1.5, 2.26, 3};
+    vecf T = {1.5};
     IsingModel ising(N, M);
     ising.draw(0, false);
     for(int i = 0; i < T.size(); i++){
@@ -62,6 +65,7 @@ int main()
             ising.Monte_Carlo(true);
             ising.draw(t+tdis+1, true);
             ising.get_energy(ee);
+            outfile << ee[0] << std::endl;
             e_sum[i] += ee[0];
             e_sqr_sum[i] += ee[1];
         }
@@ -70,6 +74,8 @@ int main()
         c.push_back(cc);
     }
     std::cout << "\033[" << N+1 << "B" <<std::endl;
+
+    outfile.close();
 
 }
 
@@ -81,7 +87,7 @@ IsingModel::IsingModel(int N, int M)
     this->num_s = N*M;
     srand(222);
     for(int i = 0; i < N*M; ++i)
-        this->s.push_back(1) ;//(int)(2*(std::rand()%2 - 0.5)) );
+        this->s.push_back(-1) ;//(int)(2*(std::rand()%2 - 0.5)) );
 }
 
 IsingModel::~IsingModel()

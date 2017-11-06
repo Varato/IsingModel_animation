@@ -38,18 +38,24 @@ int main()
 {
 
     std::ofstream outfile;
-    outfile.open("energy_data_15_100_100", std::ios::out);
-    int N = 100, M = 100;
-    int tmax = 50000;
-    int tdis = 2000;
+    outfile.open("edata", std::ios::out);
+    int N = 32, M = 32;
+    int tmax = 10000;
+    int tdis = 1;
     int ave_n = tmax - tdis;
     int t;
     vecf e_sum;
     vecf e_sqr_sum;
-    vecf c;      // heat capacity record
+    // vecf c;      // heat capacity record
     float ee[2]; // array to store energy and squared energy
+    float e_ave, e2_ave; //average energy, average squared energy.
     float cc; 
-    vecf T = {1.5};
+    vecf T;
+
+    for (float tt = 1.5; tt < 3.5 ; tt += 0.2)
+        T.push_back(tt);
+
+
     IsingModel ising(N, M);
     ising.draw(0, false);
     for(int i = 0; i < T.size(); i++){
@@ -65,13 +71,14 @@ int main()
             ising.Monte_Carlo(true);
             ising.draw(t+tdis+1, true);
             ising.get_energy(ee);
-            outfile << ee[0] << std::endl;
+            // outfile << ee[0] << std::endl;
             e_sum[i] += ee[0];
             e_sqr_sum[i] += ee[1];
         }
-        cc = e_sqr_sum[i]/ave_n/T[i]/T[i] \
-            - e_sum[i]*e_sum[i]/ave_n/ave_n/T[i]/T[i];
-        c.push_back(cc);
+        e_ave = e_sum[i]/ave_n;
+        e2_ave = e_sqr_sum[i]/ave_n;
+        cc = (e2_ave - e_ave * e_ave)/T[i]/T[i];
+        outfile << e_ave << "," << cc << "\n";
     }
     std::cout << "\033[" << N+1 << "B" <<std::endl;
 
@@ -87,7 +94,7 @@ IsingModel::IsingModel(int N, int M)
     this->num_s = N*M;
     srand(222);
     for(int i = 0; i < N*M; ++i)
-        this->s.push_back(-1) ;//(int)(2*(std::rand()%2 - 0.5)) );
+        this->s.push_back( (int)(2*(std::rand()%2 - 0.5)) );
 }
 
 IsingModel::~IsingModel()

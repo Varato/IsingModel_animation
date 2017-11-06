@@ -1,18 +1,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-ls = plt.imread("ising100T15.png")
-cs = plt.imread("ising100Tc.png")
-hs = plt.imread("ising100T5.png")
-imgs = [ls, cs, hs]
-titles = ["low T", "critical", "high T"]
-fig0, axes = plt.subplots(ncols = len(imgs), figsize = [14,6])
+# ls = plt.imread("ising100T15.png")
+# cs = plt.imread("ising100Tc.png")
+# hs = plt.imread("ising100T5.png")
+# imgs = [ls, cs, hs]
+# titles = ["low T", "critical", "high T"]
+# fig0, axes = plt.subplots(ncols = len(imgs), figsize = [14,6])
 
-for i, ax in enumerate(axes):
-    ax.imshow(imgs[i])
-    ax.set_title(titles[i])
-    ax.set_xticks([])
-    ax.set_yticks([])
+# for i, ax in enumerate(axes):
+#     ax.imshow(imgs[i])
+#     ax.set_title(titles[i])
+#     ax.set_xticks([])
+#     ax.set_yticks([])
 
 # l = np.loadtxt("energy_data_15_100_100")
 # c = np.loadtxt("energy_data_c_100_100")
@@ -30,8 +30,8 @@ for i, ax in enumerate(axes):
 # ax.set_xlabel("E/J")
 # ax.set_ylabel("counts")
 
-
-
-plt.tight_layout()
-plt.savefig("spins.png", dpi = 200)
+data = np.loadtxt("edata")
+plt.hist(data, bins = 100)
+# plt.tight_layout()
+# plt.savefig("spins.png", dpi = 200)
 plt.show()
